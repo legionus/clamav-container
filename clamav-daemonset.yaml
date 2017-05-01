@@ -1,18 +1,19 @@
+# Requires: oadm policy add-scc-to-user privileged -z default
+# It adds system:serviceaccounts:<namespace>:default SA to the privileged SCC users so they have access
+# to run with privileged settings
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   name: clamav
 spec:
-  selector:
-    matchLabels:
-      name: clamav
   template:
     metadata:
       labels:
         name: clamav
     spec:
-      #nodeSelector:
-      #  type: infra
+      # Filter to specific nodes:
+      # nodeSelector:
+      #   type: infra
       containers:
         - name: clamav
           image: clamav:v1
@@ -24,8 +25,9 @@ spec:
               command: ["/usr/bin/check_clamd.sh"]
             initialDelaySeconds: 15
             timeoutSeconds: 3
-          securityContext:
-            privileged: true
+          resources:
+            requests:
+              cpu: 0.15
           volumeMounts:
             - name: clamav-persistent-storage
               mountPath: /srv
