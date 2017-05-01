@@ -14,7 +14,7 @@ spec:
         exec:
           command: ["/usr/bin/check_clamd.sh"]
         initialDelaySeconds: 15
-        timeoutSeconds: 1
+        timeoutSeconds: 3
       securityContext:
         privileged: true
       volumeMounts:

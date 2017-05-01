@@ -2,7 +2,7 @@ FROM fedora:latest
 
 RUN \
        dnf -y update \
-    && dnf -y install clamav-server clamav-data-empty \
+    && dnf -y install socat clamav-server clamav-data-empty \
     && dnf clean all
 
 COPY clamd.conf /etc/clamd.conf
