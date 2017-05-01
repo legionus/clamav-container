@@ -2,9 +2,5 @@
 
 sock="${CLAMAV_VOLUME-}"/clamd.sock
 
-[ -S "$sock" ] ||
+[ -S "$sock" ] && [ "$(echo PING | socat -t 15 STDIO UNIX-CLIENT:"$sock")" = "PONG" ] ||
 	exit 1
-
-echo PING |
-	socat STDIO UNIX-CLIENT:"$sock" 2>&1 |
-	grep -qs PONG
