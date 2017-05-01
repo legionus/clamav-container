@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: clamav
+  namespace: default
+spec:
+  containers:
+    - name: clamav
+      image: clamav:v1
+      env:
+        - name: CLAMAV_VOLUME
+          value: /srv
+      livenessProbe:
+        exec:
+          command: ["/usr/bin/check_clamd.sh"]
+        initialDelaySeconds: 15
+        timeoutSeconds: 1
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: clamav-persistent-storage
+          mountPath: /srv
+  restartPolicy: Always
+  volumes:
+    - name: clamav-persistent-storage
+      hostPath:
+        path: /tmp/clamav-volume
